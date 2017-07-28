@@ -191,12 +191,26 @@
                 android:text="阿凡达古巴实得分gas噶所规定的" />
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/lv_dingdanguanli_xiangqing"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="10dp">
+            android:layout_height="wrap_content">
 
-        </ListView>
+            <com.bjxiyang.zhinengshequ.shop.view.DG_ListView
+
+                android:id="@+id/lv_dingdanguanli_xiangqing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </com.bjxiyang.zhinengshequ.shop.view.DG_ListView>
+        </LinearLayout>
+
+
+        <!--<ListView-->
+            <!--android:id="@+id/lv_dingdanguanli_xiangqing"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="10dp">-->
+
+        <!--</ListView>-->
 
         <View
             android:layout_width="match_parent"

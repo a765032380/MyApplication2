@@ -741,7 +741,7 @@ public class HomeAdapter extends BaseAdapter {
         final int  position1= position;
         viewHolder.ll_zongji.setVisibility(View.GONE);
         viewHolder.ll_tuikuanjindu.setVisibility(View.GONE);
-        viewHolder.button_one.setText("确认拒绝");
+        viewHolder.button_one.setText("拒绝退货");
         viewHolder.button_two.setText("确认退货");
         viewHolder.button_two.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -751,8 +751,8 @@ public class HomeAdapter extends BaseAdapter {
                 RequestCenter.order_reback_confirm(url_jujue_tuikuan, new DisposeDataListener() {
                     @Override
                     public void onSuccess(Object responseObj) {
-                        viewHolder.button_two.setText("已退货");
-
+                        viewHolder.button_two.setText("退货中");
+                        viewHolder.button_one.setVisibility(View.GONE);
                     }
 
                     @Override
@@ -770,7 +770,8 @@ public class HomeAdapter extends BaseAdapter {
                 RequestCenter.order_reback_refuse(url_tuikuan, new DisposeDataListener() {
                     @Override
                     public void onSuccess(Object responseObj) {
-
+                        viewHolder.button_one.setVisibility(View.GONE);
+                        viewHolder.button_two.setText("已拒绝退货");
                     }
 
                     @Override
@@ -1187,23 +1188,23 @@ public class HomeAdapter extends BaseAdapter {
 		/* 打印文字 */
         esc.addSelectPrintModes(EscCommand.FONT.FONTA, EscCommand.ENABLE.OFF, EscCommand.ENABLE.OFF, EscCommand.ENABLE.OFF, EscCommand.ENABLE.OFF);// 取消倍高倍宽
         esc.addSelectJustification(EscCommand.JUSTIFICATION.LEFT);// 设置打印左对齐
-        esc.addText("下单时间:"+resultBean.getOrderInfo().getOrderNo()+"\n");
+        esc.addText("订单号:"+resultBean.getOrderInfo().getOrderNo()+"\n");
         esc.addText("下单时间:"+resultBean.getOrderInfo().getCreateTime()+"\n"); // 打印文字
         double allprice=0;
         double pricehou=0;
         for (int i=0;i<resultBean.getOrderInfoProducts().size();i++){
 
-            esc.addText("商品名\t\t数量\t单价\n");
+//            esc.addText("商品名\t\t数量\t单价\n");
             esc.addText(resultBean.getOrderInfoProducts().get(i).getName()+"\t\t"
                     +"*"+resultBean.getOrderInfoProducts().get(i).getNum()+"\t"
-                    +(double)resultBean.getOrderInfoProducts().get(i).getPrice()+"\n");
+                    +df.format((double)resultBean.getOrderInfoProducts().get(i).getPrice()/100)+"\n");
 
             allprice+=resultBean.getOrderInfoProducts().get(i).getNum()*resultBean.getOrderInfoProducts().get(i).getPrice();
             pricehou+=resultBean.getOrderInfoProducts().get(i).getNum()*resultBean.getOrderInfoProducts().get(i).getAfterDiscountPrice();
         }
-        esc.addText("总计\t"+allprice+"\n");
-        esc.addText("优惠\t"+(allprice-pricehou)+"\n");
-        esc.addText("支付\t"+pricehou+"\n");
+        esc.addText("总计\t"+df.format(allprice/100)+"\n");
+        esc.addText("优惠\t"+df.format((allprice-pricehou)/100)+"\n");
+        esc.addText("支付\t"+df.format(pricehou/100)+"\n");
 //        esc.addText("已付\t"+allprice+"\n");
         esc.addSelectJustification(EscCommand.JUSTIFICATION.CENTER);// 设置打印居中
         esc.addText("--------------------\n");
