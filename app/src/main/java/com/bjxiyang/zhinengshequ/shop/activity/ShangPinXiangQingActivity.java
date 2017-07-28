@@ -330,6 +330,7 @@ public class ShangPinXiangQingActivity extends MySwipeBackActivity
                     dialog.setOnsetselect(new ListViewDialog.Onsetselect() {
                         @Override
                         public void getDianMingResult(ShangPinFenLei.Result result) {
+                            productTypeId=result.getId();
                             et_goodsclassify.setText(result.getName());
                         }
                     });

@@ -1,1 +1,1 @@
-include ':app', ':myapplication', ':imoocsdk'
+include ':app', ':myapplication', ':imoocsdk', ':qAMasterSDK'

@@ -27,6 +27,16 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!--bugout的权限-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+
+
+
 
     <permission
         android:name="com.bjxiyang.zhinengshequ.shop.permission.JPUSH_MESSAGE"
@@ -45,6 +55,15 @@
             android:name="JPUSH_APPKEY"
             tools:replace="android:value"
             android:value="d90819f8b61cd1eec4d5626f"/>
+        <!-- 设置AppKey -->
+        <meta-data
+            android:name="PROJECT_KEY"
+            android:value="c7cb8408e8287825a291b1d036a45fb1" />
+        <!-- 设置渠道信息 -->
+        <meta-data
+            android:name="Channel_ID"
+            android:value="Channel_ID" />
+
 
         <activity android:name="com.bjxiyang.zhinengshequ.shop.activity.DengLuActivity">
             <intent-filter>
