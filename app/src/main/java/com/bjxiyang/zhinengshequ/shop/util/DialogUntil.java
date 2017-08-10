@@ -22,7 +22,7 @@ public class DialogUntil {
         if (processDia == null) {
             processDia= new ProgressDialog(context);
             //点击提示框外面是否取消提示框
-            processDia.setCanceledOnTouchOutside(true);
+            processDia.setCanceledOnTouchOutside(false);
             //点击返回键是否取消提示框
             processDia.setCancelable(isCancelable);
             processDia.setIndeterminate(true);

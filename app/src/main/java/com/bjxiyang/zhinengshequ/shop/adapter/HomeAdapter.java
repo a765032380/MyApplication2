@@ -21,12 +21,14 @@ import android.widget.TextView;
 import com.baisi.myapplication.okhttp.listener.DisposeDataListener;
 import com.bjxiyang.zhinengshequ.shop.R;
 import com.bjxiyang.zhinengshequ.shop.bluetooth.PrinterConnectDialog;
+import com.bjxiyang.zhinengshequ.shop.dialog.MyDialog;
 import com.bjxiyang.zhinengshequ.shop.manager.SPManager;
 import com.bjxiyang.zhinengshequ.shop.status.BianLiDianStatus;
 import com.bjxiyang.zhinengshequ.shop.model.DingDan;
 import com.bjxiyang.zhinengshequ.shop.model.ShangJiaOrXiaJia;
 import com.bjxiyang.zhinengshequ.shop.request.RequestURL;
 import com.bjxiyang.zhinengshequ.shop.update.network.RequestCenter;
+import com.bjxiyang.zhinengshequ.shop.util.DialogUntil;
 import com.bjxiyang.zhinengshequ.shop.util.Utility;
 import com.gprinter.aidl.GpService;
 import com.gprinter.command.EscCommand;
@@ -230,13 +232,14 @@ public class HomeAdapter extends BaseAdapter {
                                 public void onClick(View v) {
                                     mList.get(position1);
                                     Log.i("YYYY", "测试接单");
+                                    DialogUntil.showLoadingDialog(mContext,"正在提交",false);
 //                                    mainActivity.printSendDaYin(mList.get(position1));
                                     String url_jiadan = RequestURL.URL_ORDER_ACCEPT + "orderId="
                                             + mList.get(position1).getOrderInfo().getId();
                                     RequestCenter.order_accept(url_jiadan, new DisposeDataListener() {
                                         @Override
                                         public void onSuccess(Object responseObj) {
-
+                                            DialogUntil.closeLoadingDialog();
 
 
                                             resultBean=mList.get(position1);
@@ -250,6 +253,7 @@ public class HomeAdapter extends BaseAdapter {
 
                                         @Override
                                         public void onFailure(Object reasonObj) {
+                                            DialogUntil.closeLoadingDialog();
 
                                         }
                                     });
