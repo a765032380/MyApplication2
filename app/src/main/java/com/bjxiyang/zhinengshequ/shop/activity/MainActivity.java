@@ -1,5 +1,8 @@
 package com.bjxiyang.zhinengshequ.shop.activity;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,18 +15,25 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bjxiyang.zhinengshequ.shop.R;
+import com.bjxiyang.zhinengshequ.shop.app.GuardApplication;
 import com.bjxiyang.zhinengshequ.shop.fragment.HomeFragment;
 import com.bjxiyang.zhinengshequ.shop.fragment.MyFragment;
 import com.bjxiyang.zhinengshequ.shop.fragment.ShoppFragment;
+import com.bjxiyang.zhinengshequ.shop.fragment.TongJiFragment;
 import com.bjxiyang.zhinengshequ.shop.manager.SPManager;
+import com.bjxiyang.zhinengshequ.shop.model.JiGuang;
 import com.bjxiyang.zhinengshequ.shop.receiver.MyReceiver;
+import com.google.gson.Gson;
 
 import java.util.Set;
 
@@ -39,15 +49,20 @@ public class MainActivity extends BeasActivity implements View.OnClickListener{
     private RelativeLayout mHomeLayout;
     private RelativeLayout mShangPingLayout;
     private RelativeLayout mMyLayout;
+    private RelativeLayout mTongJiLayout;
+
 
     private TextView mHomeView;
     private TextView mShoppView;
     private TextView mMyView;
+    private TextView mTongJiView;
 
     private FragmentManager fm;
     private Fragment mHomeFragment;
     private Fragment mMyFragment;
     private Fragment mShoppFragment;
+    private Fragment mTongJiFragment;
+    private long vT[]={300,100,300,100};
     FragmentTransaction fragmentTransaction;
     public static LinearLayout linearLayout;
     private MessageReceiver mMessageReceiver;
@@ -75,6 +90,8 @@ public class MainActivity extends BeasActivity implements View.OnClickListener{
         fragmentTransaction.add(R.id.content_layout,mHomeFragment).show(mHomeFragment);
         fragmentTransaction.commit();
 
+        mTongJiLayout= (RelativeLayout) findViewById(R.id.tongji_layout_view);
+        mTongJiLayout.setOnClickListener(this);
         mHomeLayout= (RelativeLayout) findViewById(R.id.dingdan_layout_view);
         mHomeLayout.setOnClickListener(this);
         mShangPingLayout=(RelativeLayout) findViewById(R.id.shangpin_layout_view);
@@ -85,6 +102,7 @@ public class MainActivity extends BeasActivity implements View.OnClickListener{
         mShoppView= (TextView) findViewById(R.id.fish_image_view);
         mMyView= (TextView) findViewById(R.id.mine_image_view);
         mHomeView.setBackgroundResource(R.drawable.z_icon_dingdan);
+        mTongJiView= (TextView) findViewById(R.id.tongji_image_view);
 
         linearLayout= (LinearLayout) findViewById(R.id.linearLayout);
     }
@@ -114,12 +132,14 @@ public class MainActivity extends BeasActivity implements View.OnClickListener{
         switch (view.getId()) {
             //主页
             case R.id.dingdan_layout_view:
+                mTongJiView.setBackgroundResource(R.drawable.a_icon_tongji_c);
                 mHomeView.setBackgroundResource(R.drawable.z_icon_dingdan);
                 mShoppView.setBackgroundResource(R.drawable.z_icon_shangpin_a);
                 mMyView.setBackgroundResource(R.drawable.z_icon_dianpu_a);
                 hideFragment(mHomeFragment,fragmentTransaction);
                 hideFragment(mMyFragment,fragmentTransaction);
                 hideFragment(mShoppFragment,fragmentTransaction);
+                hideFragment(mTongJiFragment,fragmentTransaction);
 //                将我们的HomeFragment显示出来
                 if (mHomeFragment == null) {
                     mHomeFragment = new HomeFragment();
@@ -130,12 +150,14 @@ public class MainActivity extends BeasActivity implements View.OnClickListener{
                 break;
 
             case R.id.shangpin_layout_view:
+                mTongJiView.setBackgroundResource(R.drawable.a_icon_tongji_c);
                 mHomeView.setBackgroundResource(R.drawable.z_icon_dingdan_a);
                 mShoppView.setBackgroundResource(R.drawable.z_icon_shangpin);
                 mMyView.setBackgroundResource(R.drawable.z_icon_dianpu_a);
                 hideFragment(mHomeFragment, fragmentTransaction);
                 hideFragment(mMyFragment, fragmentTransaction);
                 hideFragment(mShoppFragment, fragmentTransaction);
+                hideFragment(mTongJiFragment,fragmentTransaction);
                 //将我们的HomeFragment显示出来
                 if (mShoppFragment == null) {
                     mShoppFragment = new ShoppFragment();
@@ -146,18 +168,37 @@ public class MainActivity extends BeasActivity implements View.OnClickListener{
                 break;
             //我的
             case R.id.shangjia_layout_view:
+                mTongJiView.setBackgroundResource(R.drawable.a_icon_tongji_c);
                 mHomeView.setBackgroundResource(R.drawable.z_icon_dingdan_a);
                 mShoppView.setBackgroundResource(R.drawable.z_icon_shangpin_a);
                 mMyView.setBackgroundResource(R.drawable.z_icon_dianpu);
                 hideFragment(mHomeFragment, fragmentTransaction);
                 hideFragment(mShoppFragment, fragmentTransaction);
                 hideFragment(mMyFragment, fragmentTransaction);
+                hideFragment(mTongJiFragment,fragmentTransaction);
                 //将我们的HomeFragment显示出来
                 if (mMyFragment == null) {
                     mMyFragment = new MyFragment();
                     fragmentTransaction.add(R.id.content_layout, mMyFragment).show(mMyFragment).commit();
                 } else {
                     fragmentTransaction.show(mMyFragment).commit();
+                }
+                break;
+            case R.id.tongji_layout_view:
+                mTongJiView.setBackgroundResource(R.drawable.a_icon_tongji);
+                mHomeView.setBackgroundResource(R.drawable.z_icon_dingdan_a);
+                mShoppView.setBackgroundResource(R.drawable.z_icon_shangpin_a);
+                mMyView.setBackgroundResource(R.drawable.z_icon_dianpu_a);
+                hideFragment(mHomeFragment, fragmentTransaction);
+                hideFragment(mShoppFragment, fragmentTransaction);
+                hideFragment(mMyFragment, fragmentTransaction);
+                hideFragment(mTongJiFragment,fragmentTransaction);
+                //将我们的HomeFragment显示出来
+                if (mTongJiFragment == null) {
+                    mTongJiFragment = new TongJiFragment();
+                    fragmentTransaction.add(R.id.content_layout, mTongJiFragment).show(mTongJiFragment).commit();
+                } else {
+                    fragmentTransaction.show(mTongJiFragment).commit();
                 }
                 break;
         }
@@ -211,7 +252,7 @@ public class MainActivity extends BeasActivity implements View.OnClickListener{
     }
     private void setAlias() {
 
-        String alias= SPManager.getInstance().getString("name",null);
+        String alias= SPManager.getInstance().getString("linkphone",null);
         // 调用 Handler 来异步设置别名
         mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, alias));
     }
@@ -267,10 +308,38 @@ public class MainActivity extends BeasActivity implements View.OnClickListener{
                 String messge = intent.getStringExtra(MyReceiver.KEY_MESSAGE);
                 String title=intent.getStringExtra(MyReceiver.KEY_TITLE);
                 String extras = intent.getStringExtra(MyReceiver.KEY_EXTRAS);
+                Log.i("SSSSS",extras);
+                Gson gson=new Gson();
+                JiGuang.Extras extras1=gson.fromJson(extras,JiGuang.Extras.class);
+
+
+
 
             } catch (Exception e){
             }
         }
+    }
+    private void showNotification(JiGuang.Extras extras,Class mClass){
+        Intent resultIntent = new Intent(GuardApplication.getContent(), mClass);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(GuardApplication.getContent());
+        stackBuilder.addParentStack(mClass);
+        stackBuilder.addNextIntent(resultIntent);
+
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder mBuilder= (NotificationCompat.Builder)new NotificationCompat.Builder(MainActivity.this)
+                .setSmallIcon(R.mipmap.ic_launcher)   //若没有设置largeicon，此为左边的大icon，设置了largeicon，则为右下角的小icon，无论怎样，都影响Notifications area显示的图标
+                .setContentTitle(extras.getTitle()) //标题
+                .setContentText(extras.getCount())         //正文
+//                            .setNumber(3)                       //设置信息条数
+                .setDefaults(Notification.DEFAULT_SOUND)//设置声音，此为默认声音
+                .setVibrate(vT)
+                .setContentIntent(resultPendingIntent)
+                .setAutoCancel(true);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(1000, mBuilder.build());
     }
 }
 

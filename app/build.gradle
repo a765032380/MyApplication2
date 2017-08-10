@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'android-apt'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
@@ -71,6 +71,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile project(path: ':imoocsdk')
     compile project(path: ':myapplication')
+    compile project(path: ':qAMasterSDK')
     compile files('libs/commons-lang-2.6.jar')
     compile files('libs/gprintersdkv22.jar')
     compile files('libs/jcc-bate-0.7.3.jar')
@@ -82,5 +83,8 @@ dependencies {
     compile 'cn.jiguang.sdk:jpush:3.0.5'
     // 此处以JPush 3.0.5 版本为例。
     compile 'cn.jiguang.sdk:jcore:1.1.2'
-    compile project(':qAMasterSDK')
+    //注解框架
+    compile 'com.jakewharton:butterknife:8.5.1'
+    apt 'com.jakewharton:butterknife-compiler:8.5.1'
+    compile 'com.google.code.gson:gson:2.8.0'
 }

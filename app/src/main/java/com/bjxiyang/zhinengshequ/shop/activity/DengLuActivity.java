@@ -188,6 +188,7 @@ public class DengLuActivity extends BeasActivity implements View.OnClickListener
         }
     }
     private void setSP(Login login){
+        SPManager.getInstance().putString("linkphone",login.getResult().getLinkphone());
         SPManager.getInstance().putString("ShopName",login.getResult().getShopName());
         SPManager.getInstance().putString("name",login.getResult().getLoginName());
         SPManager.getInstance().putString("logo",login.getResult().getLogo());
